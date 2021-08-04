@@ -2,7 +2,7 @@
 # Follow SemVer 
 version: "0.0.1"
 # A nickname. For this server, i'll be naming nicknames after anime characters. Increment to a new anime on MAJOR, change character name on MINOR, and do not change any nickname on PATCH
-version_nickname: "hououin kyouma"
+nickname: "hououin kyouma"
 # Author name
 author: "Noah Martino a.k.a. boredhero"
 # Licensing info
