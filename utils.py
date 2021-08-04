@@ -2,10 +2,7 @@ import json
 import yaml
 import os
 
-from yaml.error import YAMLError
-
 class SimpleJsonYmlReader:
-
 
     def __init__(self, filepath):
 
