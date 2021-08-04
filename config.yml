@@ -1,0 +1,7 @@
+# Server config
+## Port to host the server on
+port: 8000
+## Host IP. See Gunicorn/Flask documentation regarding this variable
+host: "127.0.0.1"
+## Debug mode. True when testing, false in production servers. See flask documentation for more info
+debug_mode: False

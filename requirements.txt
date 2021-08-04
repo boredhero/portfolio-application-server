@@ -1,0 +1,5 @@
+firebase_admin
+colorama
+flask
+flask-classful
+gunicorn
