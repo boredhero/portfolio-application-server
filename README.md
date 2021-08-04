@@ -11,4 +11,5 @@ An demo application server that talks to Google Firestore written in python with
 
 ### Configure server
 
-* Configuration options can be found in config.yml
+* ```cp config.yml.TEMPLATE config.yml```
+* Edit config.yml as necessary
