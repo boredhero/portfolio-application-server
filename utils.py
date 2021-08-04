@@ -1,6 +1,7 @@
 import json
 import yaml
 import os
+from datetime import datetime
 
 class Singleton(type):
     _instances = {}
@@ -99,3 +100,13 @@ class InfoProivder(metaclass=Singleton):
             self.nickname = "Unknown"
             self.author = "Unknown"
             self.license = "Unknown"
+
+# Utility methods not contained within classes below
+
+def get_timestamp():
+    """
+    Formatted date/time
+
+    :returns str: datetime timestamp
+    """
+    return datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
