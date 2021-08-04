@@ -131,3 +131,6 @@ dmypy.json
 # Config files
 *.yml
 *.json
+
+# Testing files
+tester.py
