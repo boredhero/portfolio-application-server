@@ -1,6 +1,4 @@
-import json
-import yaml
-import os
+import json, yaml, os, platform, subprocess
 from datetime import datetime
 
 class Singleton(type):
@@ -110,3 +108,16 @@ def get_timestamp():
     :returns str: datetime timestamp
     """
     return datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+
+def ping(ip_addr):
+    """
+    Ping an IP
+
+    :param str ip_addr: IP Address
+
+    :returns bool: True if able to ping, False if unable to ping
+    """
+    ip_addr = str(ip_addr)
+    param = '-n' if platform.system().lower() == 'windows' else '-c'
+    command = ['ping', param, '1', ip_addr]
+    return subprocess.call(command) == 0
