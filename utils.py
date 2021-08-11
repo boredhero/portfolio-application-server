@@ -1,4 +1,5 @@
 import json, yaml, os, platform, subprocess
+import flask
 from threading import Timer
 from datetime import datetime
 
@@ -77,6 +78,7 @@ class ConfigProvider(metaclass=Singleton):
             self.port = int(self.__config_dict["port"])
             self.host = str(self.__config_dict["host"])
             self.debug_mode = bool(self.__config_dict["debug_mode"])
+            self.test_mode = bool(self.__config_dict["test_mode"])
         except Exception as e:
             print(f"ConfigProvider: An unknown error occured or a value was missing from your config.yml. Check your config.yml.TEMPLATE file for a correct example\n", e)
 
@@ -147,3 +149,110 @@ def ping(ip_addr):
     param = '-n' if platform.system().lower() == 'windows' else '-c'
     command = ['ping', param, '1', ip_addr]
     return subprocess.call(command) == 0
+
+class RequestUtils():
+
+    def __init__(self):
+        """
+        Utility Methods for request handling
+        """
+
+    def failure_template(self, err):
+        """
+        Get a failure/error dict to send back as a template.
+
+        :param str err: Reason for error
+        """
+        return {
+            "Status": "Fail",
+            "Cause": err
+        }
+
+    def blank_success_template(self):
+        """
+        Get a blank success dict with no other keys and values
+        """
+        return {
+            "Status": "Success"
+        }
+
+    def failure_template_missing_keys(self, keys):
+        """
+        Generate a request response based on required keys which are missing from the request body (raw json body)
+
+        :param list keys: List of strings of the *MISSING* keys.
+        """
+        m_keys = ', '.join(keys)
+        err = f"Missing required keys from request body: {m_keys}"
+        return self.failure_template(err)
+
+    def failure_template_null_values(self, keys):
+        """
+        Generate a request response based on a list of keys which are missing their correct values (raw json body)
+
+        :param list keys: List of strings of the keys with invalid values
+        """
+        n_value_keys = ', '.join(keys)
+        err = f"Request data values were invalud for the following keys in body: {n_value_keys}"
+        return self.failure_template(err)
+
+    def validate_request_body_keys(self, mandatory_keys, flask_request):
+        """
+        Ensure the required keys are in the body and that the body is not NoneType
+
+        :param list mandatory_keys: List of the required keys as str
+        :param flask_request: Flask request object
+
+        :returns: A dict if there was an err, so that you can return this as response to the client, else returns True if no issues found
+        """
+        missing_keys = []
+        request_body_dict = flask_request.get_json()
+        if request_body_dict is None:
+            return self.failure_template("Request body was 'None'")
+        for key in mandatory_keys:
+            if key not in request_body_dict:
+                missing_keys.append(key)
+        if len(missing_keys) > 0:
+            return self.failure_template_missing_keys(missing_keys)
+        return True
+
+    def validate_request_body_key_values(self, mandatory_keys, flask_request):
+        """
+        Check that the values of keys are not None. NOTE: Will NOT handle checking for keys. You need validate_request_body_keys() for that
+
+        :param list mandatory_keys: List of the required keys as str
+        :param flask_request: FLask request object
+
+        :returns: A dict if there as an issue, which you should send to the client, else returns True if no error occurred.
+        """
+        none_keys = []
+        request_body_dict = flask_request.get_json()
+        if request_body_dict is None:
+            return self.failure_template("Request body was 'None'")
+        for key in mandatory_keys:
+            if request_body_dict[key] is None:
+                none_keys.append(key)
+        if len(none_keys) > 0:
+            return self.failure_template_null_values(none_keys)
+        return True
+
+    def combined_key_value_checks(self, mandatory_keys, flask_request):
+        """
+        Runs both validate_request_body_keys() and validate_request_body_key_values() to check for keys and return ones which are None.
+        If both produce an error, the output from validate_request_body_keys() will be preferred.
+
+        :param list mandatory_keys: String list of keys you want checked in the body
+        :param flask_request: Flask request object
+
+        :returns: A dict if an issue occured, which you should send to the client directly, or else returns True if no error occured. 
+        """
+        v = self.validate_request_body_keys(mandatory_keys, flask_request)
+        if v is not True:
+            return v
+        else:
+            v = self.validate_request_body_key_values(mandatory_keys, flask_request)
+            if v is not True:
+                return v
+        return True
+
+
