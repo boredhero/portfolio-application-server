@@ -40,6 +40,8 @@ class FirestoreIO():
             print(f"Error: Invalid document path: {path}")
             return None
         c_handle = self.__make_coll_handle(path)
+        if c_handle is None:
+            print("Error: An issue occured trying to make the collection handle")
         try:
             c_handle.document(name).set(write_dict, merge=True)
             return True
