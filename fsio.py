@@ -64,6 +64,9 @@ class FirestoreIO():
             print(f"Error: Invalid document path: {path}")
             return None
         c_handle = self.__make_coll_handle(path)
+        if c_handle is None:
+            print("Error: An issue occured trying to make the collection handle")
+            return None
         try:
             doc = c_handle.document(name).get()
             if(doc.exists):
@@ -115,6 +118,36 @@ class FirestoreIO():
             print("Error: Issue occured executing query")
             return None
         return res
+
+    def delete_doc(self, path):
+        """
+        Delete a document using a valid path.
+
+        :param str path: Valid document path. Must begin but not end in '/'
+
+        :returns: True if document is deleted, False if the document didn't exist, and None if an error has occured.
+        """
+        exists = self.check_exists(path)
+        if exists is False:
+            return exists
+        elif exists is None:
+            return None
+        else:
+            name = self.__is_valid_document_path(path)[1]
+            if name is None or name == "" or name == " ":
+                print(f"Invalid document path: {path}")
+                return None
+            c_handle = self.__make_coll_handle(path)
+            if c_handle is None:
+                print("Error: An issue occured while trying to make the collection handle")
+                return None
+            try:
+                c_handle.document(name).delete()
+                return True
+            except Exception as e:
+                print("Error: An unknown exception occured tryign to execute firestore delete command")
+                print(e)
+                return None
 
     def __make_coll_handle(self, path):
         """
