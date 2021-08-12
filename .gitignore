@@ -134,3 +134,6 @@ config.yml
 
 # Testing files
 tester.py
+
+# Private keys
+firestore_key.json
