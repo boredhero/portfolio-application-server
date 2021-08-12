@@ -9,5 +9,3 @@ debug_mode: False
 test_mode: False
 ## Firestore key file (.json) filepath
 firestore_key_filepath: ""
-## Firestore Project Name
-firestore_project_name: ""

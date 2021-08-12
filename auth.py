@@ -12,7 +12,8 @@ class FirestoreAuthenticator():
         """
         self.__config = ConfigProvider()
         self.firestore_auth_obj = self.__make_auth()
-        def __new__(cls):
+    
+    def __new__(cls):
             return self.firestore_auth_obj
 
     def __make_auth(self):
