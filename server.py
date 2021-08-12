@@ -38,7 +38,7 @@ class RequestHandler(FlaskView):
             ts = get_timestamp()
             ip = request.remote_addr
             cid = body_json["Client ID"]
-            print(f"PING from {}")
+           # print(f"PING from {}")
 
 
 if __name__ == '__main__':
