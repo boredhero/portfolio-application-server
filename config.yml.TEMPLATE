@@ -5,3 +5,9 @@ port: 8000
 host: "127.0.0.1"
 ## Debug mode. True when testing, false in production servers. See flask documentation for more info
 debug_mode: False
+## Server Test Mode: Different from flask's debug mode. This affects labels on stuff and some other misc. things.
+test_mode: False
+## Firestore key file (.json) filepath
+firestore_key_filepath: ""
+## Firestore Project Name
+firestore_project_name: ""

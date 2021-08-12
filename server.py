@@ -20,6 +20,7 @@ class RequestHandler(FlaskView):
         """
         self.__conf = ConfigProvider()
         self.__test_mode = self.__conf.test_mode
+        self.__r_utils = RequestUtils()
 
     @route('/api/ping', methods=['POST'])
     def ping(self):
@@ -28,8 +29,16 @@ class RequestHandler(FlaskView):
 
         Required Keys: "Client ID" (str)
         """
-        required_keys = "Client ID"
-        
+        mandatory_keys = "Client ID"
+        v = self.__r_utils.combined_key_value_checks(mandatory_keys, request)
+        if v is not True:
+            return v
+        else:
+            body_json = request.get_json()
+            ts = get_timestamp()
+            ip = request.remote_addr
+            cid = body_json["Client ID"]
+            print(f"PING from {}")
 
 
 if __name__ == '__main__':
