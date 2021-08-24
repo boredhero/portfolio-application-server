@@ -2,9 +2,12 @@ from datetime import time
 from utils import *
 from fsio import FirestoreIO
 
-class MachineUtils:
+class ClientUtils:
 
     def __init__(self):
+        """
+        Helper class full of random methods useful for wrangling/logging client data
+        """
         self.__FIRESTORE_PING_LOG_PATH = "/Clients/Last Ping Log"
         self.__conf = ConfigProvider()
         if self.__conf.database_type == "firestore":

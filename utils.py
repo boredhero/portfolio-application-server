@@ -257,10 +257,3 @@ class RequestUtils():
             if v is not True:
                 return v
         return True
-
-class ClientLogger():
-
-    def __init__(self):
-        """
-        Logs client IPs. 
-        """

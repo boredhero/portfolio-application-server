@@ -1,3 +1,4 @@
+from clientutils import ClientUtils
 from flask import Flask, request
 from flask_classful import FlaskView, route
 from utils import *
@@ -21,6 +22,7 @@ class RequestHandler(FlaskView):
         self.__conf = ConfigProvider()
         self.__test_mode = self.__conf.test_mode
         self.__r_utils = RequestUtils()
+        self.__c_utils = ClientUtils()
 
     @route('/api/ping', methods=['POST'])
     def ping(self):
@@ -40,6 +42,7 @@ class RequestHandler(FlaskView):
             cid = body_json["Client ID"]
             v = body_json["Software Version"]
             print(f"{ts}: PING from {cid} @ {ip} v{v}")
+
 
 
 if __name__ == '__main__':
