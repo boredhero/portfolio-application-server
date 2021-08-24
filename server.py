@@ -42,8 +42,7 @@ class RequestHandler(FlaskView):
             cid = body_json["Client ID"]
             v = body_json["Software Version"]
             print(f"{ts}: PING from {cid} @ {ip} v{v}")
-
-
+            self.__c_utils.log_client_ping(ts, cid, ip, v)
 
 if __name__ == '__main__':
     #app.run(debug=False, host=HOST, port=PORT)
