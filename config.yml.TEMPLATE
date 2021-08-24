@@ -7,5 +7,7 @@ host: "127.0.0.1"
 debug_mode: False
 ## Server Test Mode: Different from flask's debug mode. This affects labels on stuff and some other misc. things.
 test_mode: False
+## Server Database Type. What are we logging our data to? Currently supported types are: "firestore". Plan to support "local_sql" and "remote_sql" in the future.
+database_type: "firestore"
 ## Firestore key file (.json) filepath
 firestore_key_filepath: ""
