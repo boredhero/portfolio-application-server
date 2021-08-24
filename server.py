@@ -29,7 +29,7 @@ class RequestHandler(FlaskView):
 
         Required Keys: "Client ID" (str)
         """
-        mandatory_keys = "Client ID"
+        mandatory_keys = ["Client ID", "Software Version"]
         v = self.__r_utils.combined_key_value_checks(mandatory_keys, request)
         if v is not True:
             return v
@@ -38,7 +38,8 @@ class RequestHandler(FlaskView):
             ts = get_timestamp()
             ip = request.remote_addr
             cid = body_json["Client ID"]
-            print(f"{ts}: PING from {cid} @ {ip}")
+            v = body_json["Software Version"]
+            print(f"{ts}: PING from {cid} @ {ip} v{v}")
 
 
 if __name__ == '__main__':
