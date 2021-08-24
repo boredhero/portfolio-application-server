@@ -151,6 +151,24 @@ class FirestoreIO():
                 print(e)
                 return None
 
+    # TODO: Add a recursive copy function
+    def copy_doc(self, from_path, to_path):
+        """
+        Copy a document from point a to point b.
+        Will overwrite existing docs at to_path
+
+        :returns: True if success, None if an error has occurreds
+        """
+        doc = self.read_doc(from_path)
+        if type(doc) is not dict:
+            print("Error: An error occured trying to read doc to copy. Does doc exist?")
+            return None
+        w_res = self.write_doc(to_path, doc)
+        if w_res is not True:
+            print("Error: An unknown exception occured trying to write document in copy")
+            return None
+        return True
+
     def __make_coll_handle(self, path):
         """
         Make a collection hnadle for the write_doc function
