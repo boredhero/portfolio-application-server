@@ -1,4 +1,3 @@
-from os import write
 from auth import AuthHolder
 
 class FirestoreIO():
