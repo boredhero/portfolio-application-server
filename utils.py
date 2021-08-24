@@ -79,6 +79,7 @@ class ConfigProvider(metaclass=Singleton):
             self.host = str(self.__config_dict["host"])
             self.debug_mode = bool(self.__config_dict["debug_mode"])
             self.test_mode = bool(self.__config_dict["test_mode"])
+            self.database_type = str(self.__config_dict["database_type"])
             self.firestore_key_filepath = str(self.__config_dict["firestore_key_filepath"])
             self.firestore_project_name = str(self.__config_dict["firestore_project_name"])
         except Exception as e:
