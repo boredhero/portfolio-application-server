@@ -44,6 +44,18 @@ class RequestHandler(FlaskView):
             print(f"{ts}: PING from {cid} @ {ip} v{v}")
             self.__c_utils.log_client_ping(ts, cid, ip, v)
 
+    @route('/api/send_test_message', methods=['POST'])
+    def send_text(self):
+        """
+        Send a text to a phone number
+        """
+        mandatory_keys = ["Client ID", "Text Contents", "Phone"]
+        v = self.__r_utils.combined_key_value_checks(mandatory_keys, request)
+        if v is not True:
+            return v
+        else:
+            body_json = request.get_json()
+
 if __name__ == '__main__':
     #app.run(debug=False, host=HOST, port=PORT)
     print("hi")
