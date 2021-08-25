@@ -19,12 +19,16 @@ class TwilioDispatcher():
 
         :param str message_body: String formatted message body
         :param str to_phone: Phone to send the SMS to
+
+        :returns: True if successful send, False if an exception occurred.
         """
         if twilio_msg_obj is not None:
             try:
                 twilio_msg_obj.sid
+                return True
             except Exception as e:
                 print("An issue occured trying to send a pre-constructed twilio msg object via Twilio\n", e)
+                return False
         else:
             try:
                 twilio_msg_obj = self.__tw.messages.create(
@@ -33,6 +37,8 @@ class TwilioDispatcher():
                     to = to_phone
                 )
                 twilio_msg_obj.sid
+                return True
             except Exception as e:
                 print("An issue occured trying to construct or send an SMS via Twilio.\n", e)
+                return False
         
