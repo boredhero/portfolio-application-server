@@ -61,6 +61,8 @@ class RequestHandler(FlaskView):
             message_body = body_json["SMS Body"]
             to_phone = body_json["Phone"]
             t_res = self.__td.dispatch(message_body, to_phone)
+            timestamp = get_timestamp()
+            self.__c_utils.log_sms_sent(timestamp, body_json["Client ID"], message_body, to_phone, t_res)
             if t_res is False:
                 return self.__r_utils.failure_template("An unknown error occured trying to send SMS")
             else:
