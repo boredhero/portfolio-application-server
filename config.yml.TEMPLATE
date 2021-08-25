@@ -11,3 +11,7 @@ test_mode: False
 database_type: "firestore"
 ## Firestore key file (.json) filepath
 firestore_key_filepath: ""
+## Twilio credentials
+twilio_acc_sid: ""
+twilio_auth_token: ""
+twilio_from_phone: ""
