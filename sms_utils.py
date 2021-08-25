@@ -7,6 +7,6 @@ class TwilioDispatcher():
         """
         Twilio dispatch class
         """
-        
+        self.__conf = ConfigProvider()
 
     def dispatch(self, message_body, to_phone, twilio_msg_obj=None)
