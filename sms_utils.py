@@ -13,6 +13,13 @@ class TwilioDispatcher():
         self.__tw = self.__auth.twilio
 
     def dispatch(self, message_body, to_phone, twilio_msg_obj=None):
+        """
+        Dispatch a message. If twilio_msg_obj is not None, will attempt to send a message object you made via twilio.messages.create()
+        Otherwise, feed formatted string text and a to_phone and this will yeet it.
+
+        :param str message_body: String formatted message body
+        :param str to_phone: Phone to send the SMS to
+        """
         if twilio_msg_obj is not None:
             try:
                 twilio_msg_obj.sid

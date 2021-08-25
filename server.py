@@ -1,3 +1,4 @@
+from sms_utils import TwilioDispatcher
 from clientutils import ClientUtils
 from flask import Flask, request
 from flask_classful import FlaskView, route
@@ -23,6 +24,7 @@ class RequestHandler(FlaskView):
         self.__test_mode = self.__conf.test_mode
         self.__r_utils = RequestUtils()
         self.__c_utils = ClientUtils()
+        self.__td = TwilioDispatcher()
 
     @route('/api/ping', methods=['POST'])
     def ping(self):
