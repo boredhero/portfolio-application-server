@@ -40,6 +40,5 @@ class AuthHolder(metaclass=Singleton):
             client = Client(self.__conf.twilio_acc_sid, self.__conf.twilio_auth_token)
             return client
         except Exception as e:
-            print("An unknown exception occured trying to authenticate twilio! Check your config.yml")
-            print(e)
+            print("An unknown exception occured trying to authenticate twilio! Check your config.yml\n", e)
             return None
