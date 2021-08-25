@@ -45,18 +45,26 @@ class RequestHandler(FlaskView):
             v = body_json["Software Version"]
             print(f"{ts}: PING from {cid} @ {ip} v{v}")
             self.__c_utils.log_client_ping(ts, cid, ip, v)
+            return self.__r_utils.blank_success_template()
 
     @route('/api/send_test_message', methods=['POST'])
     def send_text(self):
         """
         Send a text to a phone number
         """
-        mandatory_keys = ["Client ID", "Text Contents", "Phone"]
+        mandatory_keys = ["Client ID", "SMS Body", "Phone"]
         v = self.__r_utils.combined_key_value_checks(mandatory_keys, request)
         if v is not True:
             return v
         else:
             body_json = request.get_json()
+            message_body = body_json["SMS Body"]
+            to_phone = body_json["Phone"]
+            t_res = self.__td.dispatch(message_body, to_phone)
+            if t_res is False:
+                return self.__r_utils.failure_template("An unknown error occured trying to send SMS")
+            else:
+                return self.__r_utils.blank_success_template()
 
 if __name__ == '__main__':
     #app.run(debug=False, host=HOST, port=PORT)
