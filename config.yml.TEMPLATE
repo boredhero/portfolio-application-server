@@ -35,3 +35,5 @@ info_color: "1;32m"
 warning_color: "1;33m"
 error_color: "1;31m"
 critical_color: "1;35m"
+## Logfile name. Will be appended with timestamp of server start. Keep it simple
+logfile_name: "demo_app_server"

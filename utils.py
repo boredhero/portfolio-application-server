@@ -102,6 +102,7 @@ class ConfigProvider(metaclass=Singleton):
             self.warning_color = str(self.__config_dict["warning_color"])
             self.error_color = str(self.__config_dict["error_color"])
             self.critical_color = str(self.__config_dict["critical_color"])
+            self.logfile_name = str(self.__config_dict["logfile_name"])
         except Exception as e:
             logging.error(f"ConfigProvider: An unknown error occured or a value was missing from your config.yml. Check your config.yml.TEMPLATE file for a correct example\n", e)
 

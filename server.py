@@ -16,7 +16,10 @@ app = Flask(__name__)
 def init_logger():
 
     server_start_time = get_timestamp()
-    server_logfile_name = f"demo_server_log_{server_start_time}"
+    try:
+        server_logfile_name = f"{config.logfile_name}_{server_start_time}"
+    except:
+        server_logfile_name = f"demo_app_server_{server_start_time}"
     if (not setup_logging(console_log_output="stdout", console_log_level=config.console_log_level, console_log_color=config.console_log_color,
                         logfile_file=server_logfile_name + ".log", logfile_log_level=config.logfile_log_level, logfile_log_color=config.logfile_log_color,
                         log_line_template="%(color_on)s[%(asctime)s] [%(threadName)s] [%(levelname)-8s] %(message)s%(color_off)s")):
