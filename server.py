@@ -3,6 +3,7 @@ from clientutils import ClientUtils
 from flask import Flask, request
 from flask_classful import FlaskView, route
 from utils import *
+from loggingutils import LoggingUtils
 
 config = ConfigProvider()
 HOST = config.host
@@ -69,5 +70,6 @@ class RequestHandler(FlaskView):
                 return self.__r_utils.blank_success_template()
 
 if __name__ == '__main__':
+    log = LoggingUtils()
+    log.print_startup_message()
     #app.run(debug=False, host=HOST, port=PORT)
-    print("hi")
