@@ -72,4 +72,4 @@ class RequestHandler(FlaskView):
 if __name__ == '__main__':
     log = LoggingUtils()
     log.print_startup_message()
-    #app.run(debug=False, host=HOST, port=PORT)
+    app.run(debug=DEBUG, host=HOST, port=PORT)
