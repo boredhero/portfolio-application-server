@@ -81,8 +81,8 @@ class RequestHandler(FlaskView):
             else:
                 return self.__r_utils.blank_success_template()
 
+RequestHandler.register(app)
+
 if __name__ == '__main__':
-    log = LoggingUtils()
-    log.print_startup_message()
-    init_logger()
+
     app.run(debug=DEBUG, host=HOST, port=PORT)
