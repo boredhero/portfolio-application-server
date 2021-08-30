@@ -57,11 +57,11 @@ class LogFormatter(logging.Formatter):
         }
     else:
         COLOR_CODES = {
-            logging.CRITICAL: config.critical_color,
-            logging.ERROR: config.error_color,
-            logging.WARNING: config.warning_color,
-            logging.INFO: config.info_color,
-            logging.DEBUG: config.debug_color
+            logging.CRITICAL: f"\033[{config.critical_color}",
+            logging.ERROR: f"\033[{config.error_color}",
+            logging.WARNING: f"\033[{config.warning_color}",
+            logging.INFO: f"\033[{config.info_color}",
+            logging.DEBUG: f"\033[{config.debug_color}"
         }
 
     RESET_CODE = "\033[0m"
