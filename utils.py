@@ -83,7 +83,6 @@ class ConfigProvider(metaclass=Singleton):
             self.test_mode = bool(self.__config_dict["test_mode"])
             self.database_type = str(self.__config_dict["database_type"])
             self.firestore_key_filepath = str(self.__config_dict["firestore_key_filepath"])
-            self.firestore_project_name = str(self.__config_dict["firestore_project_name"])
             self.twilio_acc_sid = str(self.__config_dict["twilio_acc_sid"])
             self.twilio_auth_token = str(self.__config_dict["twilio_auth_token"])
             self.twilio_from_phone = str(self.__config_dict["twilio_from_phone"])
