@@ -1,9 +1,10 @@
+import os, sys, logging
 from sms_utils import TwilioDispatcher
 from clientutils import ClientUtils
 from flask import Flask, request
 from flask_classful import FlaskView, route
 from utils import *
-from loggingutils import LoggingUtils
+from loggingutils import LoggingUtils, setup_logging
 
 config = ConfigProvider()
 HOST = config.host
@@ -12,7 +13,21 @@ DEBUG = config.debug_mode
 
 app = Flask(__name__)
 
-# TODO: Print startup method
+def init_logger():
+
+    server_start_time = get_timestamp()
+    server_logfile_name = f"demo_server_log_{server_start_time}"
+    if (not setup_logging(console_log_output="stdout", console_log_level="info", console_log_color=True,
+                        logfile_file=server_logfile_name + ".log", logfile_log_level="debug", logfile_log_color=False,
+                        log_line_template="%(color_on)s[%(created)d] [%(threadName)s] [%(levelname)-8s] %(message)s%(color_off)s")):
+        print("Failed to setup logging, aborting.")
+        return 1
+
+    logging.debug("Debug")
+    logging.info("info")
+    logging.warning("warning")
+    logging.error("error")
+    logging.critical("crit")
 
 class RequestHandler(FlaskView):
     route_base = '/'
@@ -44,7 +59,7 @@ class RequestHandler(FlaskView):
             ip = request.remote_addr
             cid = body_json["Client ID"]
             v = body_json["Software Version"]
-            print(f"{ts}: PING from {cid} @ {ip} v{v}")
+            logging.info(f"{ts}: PING from {cid} @ {ip} v{v}")
             self.__c_utils.log_client_ping(ts, cid, ip, v)
             return self.__r_utils.blank_success_template()
 
@@ -72,4 +87,5 @@ class RequestHandler(FlaskView):
 if __name__ == '__main__':
     log = LoggingUtils()
     log.print_startup_message()
+    init_logger()
     app.run(debug=DEBUG, host=HOST, port=PORT)
