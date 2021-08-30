@@ -94,6 +94,14 @@ class ConfigProvider(metaclass=Singleton):
             if self.logfile_log_level not in self.__valid_log_levels:
                 print(f"ConfigProvider: logfile_log_level value of '{self.logfile_log_level}' is invalid. Check config for valid types and ensure all lowercase. Setting to 'debug' until you fix this")
                 self.console_log_level = self.__valid_log_levels[0]
+            self.console_log_color = bool(self.__config_dict["console_log_color"])
+            self.logfile_log_color = bool(self.__config_dict["logfile_log_color"])
+            self.enable_custom_log_color_config = bool(self.__config_dict["enable_custom_log_color_config"])
+            self.debug_color = str(self.__config_dict["debug_color"])
+            self.info_color = str(self.__config_dict["info_color"])
+            self.warning_color = str(self.__config_dict["warning_color"])
+            self.error_color = str(self.__config_dict["error_color"])
+            self.critical_color = str(self.__config_dict["critical_color"])
         except Exception as e:
             logging.error(f"ConfigProvider: An unknown error occured or a value was missing from your config.yml. Check your config.yml.TEMPLATE file for a correct example\n", e)
 
