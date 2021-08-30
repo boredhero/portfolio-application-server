@@ -2,6 +2,7 @@ import json, yaml, os, platform, subprocess
 import flask
 from threading import Timer
 from datetime import datetime
+import logging
 
 class Singleton(type):
     _instances = {}
@@ -53,17 +54,17 @@ class SimpleJsonYmlReader:
                     elif self.__ext in self.JSON:
                         file = json.load(f)
                     else:
-                        print("SimpleJsonYmlReader: read_file: Error: Filetype not JSON or YAML. Please check your fileextension")
+                        logging.error("SimpleJsonYmlReader: read_file: Filetype not JSON or YAML. Please check your fileextension")
             except FileNotFoundError as e:
-                print(f"SimpleJsonYmlReader: read_file: File not found: {self.__filepath}\n", e)
+                logging.error(f"SimpleJsonYmlReader: read_file: File not found: {self.__filepath}\n", e)
             except json.JSONDecodeError as e:
-                print(f"SimpleJsonYmlReader: read_file: Error decoding JSON file: {self.__filepath}\n", e)
+                logging.error(f"SimpleJsonYmlReader: read_file: Error decoding JSON file: {self.__filepath}\n", e)
             except yaml.YAMLError as e:
-                print(f"SimpleJsonYmlReader: read_file: Error decoding YML file {self.__filepath}\n", e)
+                logging.error(f"SimpleJsonYmlReader: read_file: Error decoding YML file {self.__filepath}\n", e)
             except Exception as e:
-                print(f"SimpleJsonYmlReader: read_file: An unknown error occured proccessing the file {self.__filepath}\n", e)
+                logging.error(f"SimpleJsonYmlReader: read_file: An unknown error occured proccessing the file {self.__filepath}\n", e)
         else:
-            print(f"SimpleJsonYmlReader: read_file: Error: File extension {self.__ext} not a valid extension!")
+            logging.error(f"SimpleJsonYmlReader: read_file: Error: File extension {self.__ext} not a valid extension!")
         return file
 
 class ConfigProvider(metaclass=Singleton):
@@ -86,7 +87,7 @@ class ConfigProvider(metaclass=Singleton):
             self.twilio_auth_token = str(self.__config_dict["twilio_auth_token"])
             self.twilio_from_phone = str(self.__config_dict["twilio_from_phone"])
         except Exception as e:
-            print(f"ConfigProvider: An unknown error occured or a value was missing from your config.yml. Check your config.yml.TEMPLATE file for a correct example\n", e)
+            logging.error(f"ConfigProvider: An unknown error occured or a value was missing from your config.yml. Check your config.yml.TEMPLATE file for a correct example\n", e)
 
 class InfoProivder(metaclass=Singleton):
 
@@ -102,7 +103,7 @@ class InfoProivder(metaclass=Singleton):
             self.author = str(self.__info_dict["author"])
             self.license = str(self.__info_dict["license"])
         except Exception as e:
-            print("InfoProvider: An unknown error occured or a value was missing from your info.yml. Check that your info file exists!\n", e)
+            logging.error("InfoProvider: An unknown error occured or a value was missing from your info.yml. Check that your info file exists!\n", e)
             self.version = "Unknown"
             self.nickname = "Unknown"
             self.author = "Unknown"

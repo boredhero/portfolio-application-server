@@ -1,6 +1,4 @@
-from datetime import time
-
-from twilio.rest.api.v2010.account import message
+import logging
 from utils import *
 from fsio import FirestoreIO
 
@@ -31,7 +29,7 @@ class ClientUtils:
         if self.__conf.database_type == "firestore":
             self.__log_client_ping_firestore(timestamp, client_id, client_ip, client_version)
         else:
-            print(f"Error: database_type {self.__conf.database_type} not currently supported.")
+            logging.error(f"ClientUtils: log_client_ping: database_type {self.__conf.database_type} not currently supported.")
 
     def log_sms_sent(self, timestamp, client_id, message_contents, to_phone, success_bool):
         """
@@ -46,14 +44,14 @@ class ClientUtils:
         if self.__conf.database_type == "firestore":
             self.__log_sms_sent_firestore(timestamp, client_id, message_contents, to_phone, success_bool)
         else:
-            print(f"Error: database_type {self.__conf.database_type} not currently supported.")
+            logging.error(f"ClientUtils: log_sms_sent: database_type {self.__conf.database_type} not currently supported.")
         
     def __log_sms_sent_firestore(self, timestamp, client_id, message_contents, to_phone, success_bool):
         """
         Log sms sent firestore
         """
         if self.__fsio is None:
-            print("Error: Trying to run a firestore logger when database_type is set to something other than 'firestore'")
+            logging.error("ClientUtils: __log_sms_sent_firestore: Trying to run a firestore logger when database_type is set to something other than 'firestore'")
         else:
             part_dict = {
                 "clients": {
@@ -68,14 +66,14 @@ class ClientUtils:
             }
             w_res = self.__fsio.write_doc(self.__SMS_LOG_PATH, part_dict)
             if w_res is not True:
-                print(f"{timestamp}: Error occurred trying to log SEND_TEXT from {client_id}")
+                logging.error(f"ClientUtils: __log_sms_sent_firestore: Error occurred trying to log SEND_TEXT from {client_id}")
         
     def __log_client_ping_firestore(self, timestamp, client_id, client_ip, client_version):
         """
         Log client IP firestore
         """
         if self.__fsio is None:
-            print("Error: Trying to run a firestore logger when database_type is set to something other than 'firestore'")
+            logging.error("ClientUtils: __log_client_ping_firestore: Trying to run a firestore logger when database_type is set to something other than 'firestore'")
         else:
             part_dict = {
                 "clients": {
@@ -88,4 +86,4 @@ class ClientUtils:
             }
             w_res = self.__fsio.write_doc(self.__FIRESTORE_PING_LOG_PATH, part_dict)
             if w_res is not True:
-                print(f"{timestamp}: Error occured trying to log PING from {client_id} v{client_version} @ {client_ip}")
+                logging.error(f"ClientUtils: __log_client_ping_firestore: Error occured trying to log PING from {client_id} v{client_version} @ {client_ip}")

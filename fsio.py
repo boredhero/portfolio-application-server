@@ -1,3 +1,4 @@
+import logging
 from auth import AuthHolder
 
 class FirestoreIO():
@@ -32,20 +33,20 @@ class FirestoreIO():
                 print("Error")
         """
         if type(write_dict) is not dict:
-            print(f"Error: type(write_dict) is not dict.")
+            logging.error(f"FirestoreIO: write_doc: type(write_dict) is not dict.")
             return None
         name = self.__is_valid_document_path(path)[1]
         if name is None or name == "" or name == " ":
-            print(f"Error: Invalid document path: {path}")
+            logging.error(f"FirestoreIO: write_doc: Invalid document path: {path}")
             return None
         c_handle = self.__make_coll_handle(path)
         if c_handle is None:
-            print("Error: An issue occured trying to make the collection handle")
+            logging.warning("FirestoreIO: write_doc: An issue occured trying to make the collection handle")
         try:
             c_handle.document(name).set(write_dict, merge=True)
             return True
         except Exception as e:
-            print(e)
+            logging.error(e)
             return False
 
     def read_doc(self, path):
@@ -62,22 +63,22 @@ class FirestoreIO():
         """
         name = self.__is_valid_document_path(path)[1]
         if name is None or name == "" or name == " ":
-            print(f"Error: Invalid document path: {path}")
+            logging.error(f"FirestoreIO: read_doc: Invalid document path: {path}")
             return None
         c_handle = self.__make_coll_handle(path)
         if c_handle is None:
-            print("Error: An issue occured trying to make the collection handle")
+            logging.error("FirestoreIO: read_doc: An issue occured trying to make the collection handle")
             return None
         try:
             doc = c_handle.document(name).get()
             if(doc.exists):
                 return doc.to_dict()
             else:
-                print(f"Warning: Your doc at path: {path} appears to not exist! Check that it exists first and try again!")
+                logging.warning(f"FirestoreIO: read_doc: Your doc at path: {path} appears to not exist! Check that it exists first and try again!")
                 return None
         except Exception as e:
-            print(f"Warning: An unknown exception occured trying to read your doc at {path}")
-            print(e)
+            logging.error(f"FirestoreIO: read_doc: An unknown exception occured trying to read your doc at {path}")
+            logging.error(e)
             return None
             
     def check_exists(self, path):
@@ -108,15 +109,15 @@ class FirestoreIO():
         """
         c_handle = self.__make_coll_handle(collection_path)
         if c_handle is None:
-            print("Error: Issue occured making collection handle")
+            logging.error("FirestoreIO: read_docs_by_query: Issue occured making collection handle")
             return None
         q_ref = self.__construct_query_ref(c_handle, query_list)
         if q_ref is None:
-            print("Error: Issue occured constructing query reference")
+            logging.error("FirestoreIO: read_docs_by_query: Issue occured constructing query reference")
             return None
         res = self.__execute_query(q_ref)
         if res is None:
-            print("Error: Issue occured executing query")
+            logging.error("FirestoreIO: read_docs_by_query: Issue occured executing query")
             return None
         return res
 
@@ -136,18 +137,18 @@ class FirestoreIO():
         else:
             name = self.__is_valid_document_path(path)[1]
             if name is None or name == "" or name == " ":
-                print(f"Invalid document path: {path}")
+                logging.error(f"FirestoreIO: delete_doc: Invalid document path: {path}")
                 return None
             c_handle = self.__make_coll_handle(path)
             if c_handle is None:
-                print("Error: An issue occured while trying to make the collection handle")
+                logging.error("FirestoreIO: delete_doc: An issue occured while trying to make the collection handle")
                 return None
             try:
                 c_handle.document(name).delete()
                 return True
             except Exception as e:
-                print("Error: An unknown exception occured tryign to execute firestore delete command")
-                print(e)
+                logging.error("FirestoreIO: delete_doc: An unknown exception occured tryign to execute firestore delete command")
+                logging.error(e)
                 return None
 
     # TODO: Add a recursive copy function
@@ -160,11 +161,11 @@ class FirestoreIO():
         """
         doc = self.read_doc(from_path)
         if type(doc) is not dict:
-            print("Error: An error occured trying to read doc to copy. Does doc exist?")
+            logging.error("FirestoreIO: copy_doc: An error occured trying to read doc to copy. Does doc exist?")
             return None
         w_res = self.write_doc(to_path, doc)
         if w_res is not True:
-            print("Error: An unknown exception occured trying to write document in copy")
+            logging.error("FirestoreIO: copy_doc: An unknown exception occured trying to write document in copy")
             return None
         return True
 
@@ -178,15 +179,15 @@ class FirestoreIO():
         """
         path_chopped = self.__is_valid_collection_path(path)[0]
         if path_chopped is None:
-            print(f"Error: Unable to continue. Path is not valid. Path: {path}")
+            logging.error(f"FirestoreIO: __make_coll_handle: Unable to continue. Path is not valid. Path: {path}")
             return None
         else:
             try:
                 coll_handle = self.__firestore.collection(path_chopped)
                 return coll_handle
             except Exception as e:
-                print(f"Error: An unknonw exception occured making a collection handle for path {path}")
-                print(e)
+                logging.error(f"FirestoreIO: __make_coll_handle: An unknonw exception occured making a collection handle for path {path}")
+                logging.error(e)
                 return None
 
     def __is_valid_document_path(self, path):
@@ -200,13 +201,13 @@ class FirestoreIO():
         Document paths must be of type str and begin with a '/' but must not end with a '/' and require an odd number of '/'
         """
         if type(path) != str or path == "" or path == " ":
-            print(f"Warning: Document path is not string or is an empty string. Your path: {path}")
+            logging.error(f"FirestoreIO: __is_valid_document_path: Document path is not string or is an empty string. Your path: {path}")
             return None
         elif path[0] != "/":
-            print(f"Warning: Document path MUST begin with '/'. Your path: {path}")
+            logging.error(f"FirestoreIO: __is_valid_document_path: Document path MUST begin with '/'. Your path: {path}")
             return None
         elif path[-1] == "/":
-            print(f"Warning: Document path MUST NOT end in '/'. Your path: {path}")
+            logging.error(f"FirestoreIO: __is_valid_document_path: Document path MUST NOT end in '/'. Your path: {path}")
             return None
         else:
             list_slash_pos = []
@@ -218,7 +219,7 @@ class FirestoreIO():
                     list_slash_pos.append(counter)
                 counter += 1
             if forward_slash_count % 2 != 0:
-                print(f"Warning: Path has an odd number of '/'. You are trying to operate on a collection. Your path: {path}")
+                logging.error(f"FirestoreIO: __is_valid_document_path: Path has an odd number of '/'. You are trying to operate on a collection. Your path: {path}")
                 return None
             else:
                 return [path[1:list_slash_pos[len(list_slash_pos)-1]], path[list_slash_pos[len(list_slash_pos)-1]+1:len(path)]]
@@ -232,13 +233,13 @@ class FirestoreIO():
         Collection paths must be of type str and begin and end with a '/' and require an even number of '/'
         """
         if type(path) != str or path == "" or path == " ":
-            print(f"Warning: Collection path is not string or is an empty string. Your path: {path}")
+            logging.error(f"FirestoreIO: __is_valid_collection_path: Collection path is not string or is an empty string. Your path: {path}")
             return None
         elif path[0] != "/":
-            print(f"Warning: Collection path MUST begin with '/'. Your path: {path}")
+            logging.error(f"FirestoreIO: __is_valid_collection_path: Collection path MUST begin with '/'. Your path: {path}")
             return None
         elif path[-1] != "/":
-            print(f"Warning: Document path MUST end in '/'. Your path: {path}")
+            logging.error(f"FirestoreIO: __is_valid_collection_path: Document path MUST end in '/'. Your path: {path}")
             return None
         else:
             return path[1:len(path)-1]
@@ -255,20 +256,20 @@ class FirestoreIO():
            https://stackoverflow.com/a/53048641
         """
         if len(query_list) > 3:
-            print("ERROR: You tried to pass a query_list with more than 3 elements")
+            logging.error("FirestoreIO: __construct_query_ref: You tried to pass a query_list with more than 3 elements")
             return None
         counter = 0
         while counter < len(query_list):
             if isinstance(query_list[counter], str) is False:
-                print("WARNING: You tried to pass something that wasn't a string into your query_list! We will cast for you this time, but please fix it")
+                logging.warning("FirestoreIO: __construct_query_ref: You tried to pass something that wasn't a string into your query_list! We will cast for you this time, but please fix it")
                 query_list[counter] = str(query_list[counter])
             counter += 1
         try:
             query_ref = collection_handle.where(f'{query_list[0]}', f'{query_list[1]}', f'{query_list[2]}')
             return query_ref
         except Exception as e:
-            print("ERROR: An unknown error occured trying to construct your query_ref for you. Please investigate.")
-            print(e)
+            logging.error("FirestoreIO: __construct_query_ref: An unknown error occured trying to construct your query_ref for you. Please investigate.")
+            logging.error(e)
             return None
 
     def __execute_query(self, query_ref):
@@ -283,13 +284,11 @@ class FirestoreIO():
             docs = query_ref.stream()
             docs = list(docs)
         except Exception as e:
-            print(f"ERROR: An Exception occured while trying to execute your query! Returning None. Stacktrace: \n\n{e}")
-            print(e)
+            logging.error(f"FirestoreIO: __execute_query: An Exception occured while trying to execute your query! Returning None. Stacktrace: \n\n{e}")
             return None
-        
         for doc in docs:
             if str(doc.id) in doc_dicts_dict:
-                print(f"WARNING: Duplicate key in doc_dicts_dict, this is a firestore data structure issue! Will overwrite previous entry!")
+                logging.warning(f"FirestoreIO: __execute_query: Duplicate key in doc_dicts_dict, this is a firestore data structure issue! Will overwrite previous entry!")
                 doc_dicts_dict[f'{doc.id}'] = doc.to_dict()
             else:
                 doc_dicts_dict[f'{doc.id}'] = doc.to_dict()

@@ -1,4 +1,4 @@
-import twilio
+import logging
 from auth import AuthHolder
 from utils import ConfigProvider
 
@@ -27,7 +27,7 @@ class TwilioDispatcher():
                 twilio_msg_obj.sid
                 return True
             except Exception as e:
-                print("An issue occured trying to send a pre-constructed twilio msg object via Twilio\n", e)
+                logging.error("An issue occured trying to send a pre-constructed twilio msg object via Twilio\n", e)
                 return False
         else:
             try:
@@ -39,6 +39,6 @@ class TwilioDispatcher():
                 twilio_msg_obj.sid
                 return True
             except Exception as e:
-                print("An issue occured trying to construct or send an SMS via Twilio.\n", e)
+                logging.error("An issue occured trying to construct or send an SMS via Twilio.\n", e)
                 return False
         

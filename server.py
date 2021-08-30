@@ -23,12 +23,6 @@ def init_logger():
         print("Failed to setup logging, aborting.")
         return 1
 
-    logging.debug("Debug")
-    logging.info("info")
-    logging.warning("warning")
-    logging.error("error")
-    logging.critical("crit")
-
 class RequestHandler(FlaskView):
     route_base = '/'
 
