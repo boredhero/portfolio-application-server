@@ -9,7 +9,7 @@ def windows_enable_ansi_terminal():
             import ctypes
             kernel32 = ctypes.windll.kernel32
             result = kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
-            if result is 0:
+            if result == 0:
                 raise Exception
                 return True
         except:
