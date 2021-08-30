@@ -1,3 +1,4 @@
+from auth import AuthHolder
 import os, sys, logging
 from sms_utils import TwilioDispatcher
 from clientutils import ClientUtils
@@ -84,5 +85,4 @@ class RequestHandler(FlaskView):
 RequestHandler.register(app)
 
 if __name__ == '__main__':
-
     app.run(debug=DEBUG, host=HOST, port=PORT)
