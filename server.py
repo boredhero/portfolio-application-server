@@ -17,7 +17,7 @@ def init_logger():
 
     server_start_time = get_timestamp()
     server_logfile_name = f"demo_server_log_{server_start_time}"
-    if (not setup_logging(console_log_output="stdout", console_log_level="info", console_log_color=True,
+    if (not setup_logging(console_log_output="stdout", console_log_level="debug", console_log_color=True,
                         logfile_file=server_logfile_name + ".log", logfile_log_level="debug", logfile_log_color=False,
                         log_line_template="%(color_on)s[%(created)d] [%(threadName)s] [%(levelname)-8s] %(message)s%(color_off)s")):
         print("Failed to setup logging, aborting.")

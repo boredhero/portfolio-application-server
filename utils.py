@@ -75,6 +75,7 @@ class ConfigProvider(metaclass=Singleton):
         """
         self.__config_file = SimpleJsonYmlReader("config.yml")
         self.__config_dict = self.__config_file.read_file()
+        self.__valid_log_levels = ["debug", "info", "warning", "error", "critical"]
         try:
             self.port = int(self.__config_dict["port"])
             self.host = str(self.__config_dict["host"])
@@ -86,6 +87,14 @@ class ConfigProvider(metaclass=Singleton):
             self.twilio_acc_sid = str(self.__config_dict["twilio_acc_sid"])
             self.twilio_auth_token = str(self.__config_dict["twilio_auth_token"])
             self.twilio_from_phone = str(self.__config_dict["twilio_from_phone"])
+            self.console_log_level = str(self.__config_dict["console_log_level"])
+            if self.console_log_level not in self.__valid_log_levels:
+                print(f"ConfigProvider: console_log_level value of '{self.console_log_level}' is invalid. Check config for valid types and ensure all lowercase. Setting to 'debug' until you fix this")
+                self.console_log_level = self.__valid_log_levels[0]
+            self.logfile_log_level = str(self.__config_dict["logfile_log_level"])
+            if self.logfile_log_level not in self.__valid_log_levels:
+                print(f"ConfigProvider: logfile_log_level value of '{self.logfile_log_level}' is invalid. Check config for valid types and ensure all lowercase. Setting to 'debug' until you fix this")
+                self.console_log_level = self.__valid_log_levels[0]
         except Exception as e:
             logging.error(f"ConfigProvider: An unknown error occured or a value was missing from your config.yml. Check your config.yml.TEMPLATE file for a correct example\n", e)
 
