@@ -46,13 +46,23 @@ class LoggingUtils:
 
 class LogFormatter(logging.Formatter):
 
-    COLOR_CODES = {
-        logging.CRITICAL: "\033[1;35m",
-        logging.ERROR: "\033[1;31m",
-        logging.WARNING: "\033[1;33m",
-        logging.INFO: "\033[1;32m",
-        logging.DEBUG: "\033[1;30m"
-    }
+    config = ConfigProvider()
+    if config.enable_custom_log_color_config is False:
+        COLOR_CODES = {
+            logging.CRITICAL: "\033[1;35m",
+            logging.ERROR: "\033[1;31m",
+            logging.WARNING: "\033[1;33m",
+            logging.INFO: "\033[1;32m",
+            logging.DEBUG: "\033[1;30m"
+        }
+    else:
+        COLOR_CODES = {
+            logging.CRITICAL: config.critical_color,
+            logging.ERROR: config.error_color,
+            logging.WARNING: config.warning_color,
+            logging.INFO: config.info_color,
+            logging.DEBUG: config.debug_color
+        }
 
     RESET_CODE = "\033[0m"
 
