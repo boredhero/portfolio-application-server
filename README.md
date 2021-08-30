@@ -13,3 +13,23 @@ An demo application server that talks to Google Firestore written in python with
 
 * ```cp config.yml.TEMPLATE config.yml```
 * Edit config.yml as necessary
+
+### Run server
+
+#### Dev environment
+
+* ```python3 server.py```
+  
+#### Production environment
+
+* ```gunicorn start:app```
+
+## Currently Known Bugs/WIP Features
+
+### Known Bugs
+
+* Logging currently not working with gunicorn production environment, only in the dev environment
+
+### WIP Features
+
+* SQL database support
