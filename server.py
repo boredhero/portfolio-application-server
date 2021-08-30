@@ -13,7 +13,9 @@ PORT = config.port
 DEBUG = config.debug_mode
 
 app = Flask(__name__)
-
+AuthHolder()
+log = LoggingUtils()
+log.print_startup_message()
 def init_logger():
 
     server_start_time = get_timestamp()
@@ -26,6 +28,7 @@ def init_logger():
                         log_line_template="%(color_on)s[%(asctime)s] [%(threadName)s] [%(levelname)-8s] %(message)s%(color_off)s")):
         print("Failed to setup logging, aborting.")
         return 1
+init_logger()
 
 class RequestHandler(FlaskView):
     route_base = '/'

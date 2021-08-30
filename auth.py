@@ -2,6 +2,7 @@ from firebase_admin import firestore, credentials
 import firebase_admin
 from twilio.rest import Client
 from utils import ConfigProvider, Singleton
+import logging
 
 class AuthHolder(metaclass=Singleton):
 
@@ -40,5 +41,6 @@ class AuthHolder(metaclass=Singleton):
             client = Client(self.__conf.twilio_acc_sid, self.__conf.twilio_auth_token)
             return client
         except Exception as e:
-            print("An unknown exception occured trying to authenticate twilio! Check your config.yml\n", e)
+            logging.error("An unknown exception occured trying to authenticate twilio! Check your config.yml")
+            logging.error(e)
             return None
