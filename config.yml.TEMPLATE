@@ -1,4 +1,4 @@
-# Server config
+# --------------------------- Server Config --------------------------- #
 ## Port to host the server on
 port: 8000
 ## Host IP. See Gunicorn/Flask documentation regarding this variable
@@ -7,15 +7,31 @@ host: "127.0.0.1"
 debug_mode: False
 ## Server Test Mode: Different from flask's debug mode. This affects labels on stuff and some other misc. things.
 test_mode: False
+# --------------------------- Databases --------------------------- #
 ## Server Database Type. What are we logging our data to? Currently supported types are: "firestore". Plan to support "local_sql" and "remote_sql" in the future.
 database_type: "firestore"
 ## Firestore key file (.json) filepath
-firestore_key_filepath: ""
+firestore_key_filepath: "/home/youruser/keys/fskey.json"
+# --------------------------- SMS Config --------------------------- #
 ## Twilio credentials
 twilio_acc_sid: ""
 twilio_auth_token: ""
 twilio_from_phone: ""
+# --------------------------- Logging --------------------------- #
 ## Log levels: "debug", "info", "warning", "error", "critical"
 ## Strongly recommend keeping both of these to "debug" or "info"
 console_log_level: "debug"
 logfile_log_level: "debug"
+## Log colors True to enable, False to disable color logging
+console_log_color: True
+logfile_log_color: True
+## Log color configuration
+## Enable or disable configurable log colors. If false, hardcoded defaults will be used
+enable_custom_log_color_config: False
+## NOTE: The below optuions only work if enable_custom_log_color_config is set to True and will be ignored otherwise
+### The values populated in these fields are the defaults for example purposes of how you must format your custom colors.
+debug_color: "1;30m"
+info_color: "1;32m"
+warning_color: "1;33m"
+error_color: "1;31m"
+critical_color: "1;35m"
